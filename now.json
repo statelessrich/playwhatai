@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/pages/api/**/*.js",
+      "use": "@now/node",
+      "config": {
+        "timeout": 300000
+      }
+    }
+  ]
+}
