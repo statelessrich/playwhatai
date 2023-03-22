@@ -1,29 +1,50 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 import styles from "./index.module.scss";
 
 export default function Home() {
   const [gameInput, setGameInput] = useState("Super Mario RPG");
-  const [genreInput, setGenreInput] = useState("RPG");
-  const [platformInput, setPlatformInput] = useState("");
   const [ageInput, setAgeInput] = useState("modern");
   const [result, setResult] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [heroImage, setHeroImage] = useState();
 
   const override = {
     display: "block",
     margin: "0 auto",
     position: "absolute",
-    // borderColor: "red",
   };
+
+  // on load get random game screenshot for hero image
+  useEffect(() => {
+    async function getHeroImage() {
+      try {
+        const response = await fetch("/api/heroImage", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        setHeroImage(data.image);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    }
+
+    getHeroImage();
+  }, []);
 
   async function onSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
     setResult("");
 
+    // submit openai prompt
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -40,9 +61,8 @@ export default function Home() {
       }
 
       // replace new line characters
-      const formattedResult = data.result.replace(/\n/g, "");
-      setResult(JSON.parse(formattedResult));
-      console.log(JSON.parse(formattedResult));
+      const formattedResult = JSON.parse(data.result.replace(/\n/g, ""));
+      setResult(formattedResult);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -54,16 +74,19 @@ export default function Home() {
     <div>
       <Head>
         <title>playwhat</title>
-        {/* <link rel="icon" href="/dog.png" /> */}
+        <link rel="icon" href="/logo.png" />
       </Head>
 
       <main className={styles.main}>
-        {/* <img src="/dog.png" className={styles.icon} /> */}
+        <img src="/logo.png" className={styles.icon} alt="play what logo" />
         <h1>playwhat</h1>
 
         <div className={styles.formContainer}>
+          {heroImage && <img src={heroImage} alt="playwhat" />}
+
           <form onSubmit={onSubmit}>
             <span className={styles.inlineForm}>
+              {/* age */}
               <div>
                 <span className={styles.text}>I wanna play a</span>{" "}
                 <select
@@ -76,6 +99,7 @@ export default function Home() {
                   <option value="modern">modern</option>
                 </select>{" "}
               </div>
+              {/* name */}
               <div>
                 <span className={styles.text}>game like</span>{" "}
                 <input
@@ -88,37 +112,14 @@ export default function Home() {
                 />
                 <span className={styles.text}>.</span>
               </div>
-              {/* <div>
-                <span className={styles.text}> in the</span>{" "}
-                <input
-                  className={`${styles.inline} ${styles.genre}`}
-                  type="text"
-                  name="genre"
-                  placeholder="RPG"
-                  value={genreInput}
-                  onChange={(e) => setGenreInput(e.target.value)}
-                />{" "}
-                genre.
-              </div> */}
-              {/* <input
-              type="text"
-              name="platform"
-              placeholder="platform"
-              value={platformInput}
-              onChange={(e) => setPlatformInput(e.target.value)}
-            /> */}
             </span>{" "}
+            {/* submit */}
             <div className={styles.submitContainer}>
               {isLoading ? (
                 <>
                   <input type="submit" className={`${styles.submit} ${styles.loading}`} value=""></input>
 
-                  <PacmanLoader
-                    // loading={isLoading}
-                    cssOverride={override}
-                    className={styles.loader}
-                    color="#484848"
-                  />
+                  <PacmanLoader cssOverride={override} className={styles.loader} color="#484848" />
                 </>
               ) : (
                 <input type="submit" className={styles.submit} value="recommend me" />
@@ -127,22 +128,24 @@ export default function Home() {
           </form>
         </div>
 
-        <div className={styles.result}>{formatResponse(result)}</div>
+        <div className={styles.result}>{formatResponse(result, heroImage)}</div>
       </main>
     </div>
   );
 }
 
-function formatResponse(result) {
+function formatResponse(result, screenshot) {
   return (
     <>
       {result?.games?.map((game) => (
         <div className={styles.game} key={game.name}>
-          {/* <div className={styles.gameImg}>
-        <img src={game.img} />
-      </div> */}
-          <h2>{game.name}</h2>
-          <p>{game.description}</p>
+          <div className={styles.text}>
+            <h2>
+              {game.name}&nbsp;
+              <small>{game.platform}</small>
+            </h2>
+            <p>{game.description}</p>
+          </div>
         </div>
       ))}
 
