@@ -110,9 +110,8 @@ export default function Home() {
                   value={gameInput}
                   onChange={(e) => setGameInput(e.target.value)}
                 />
-                <span className={styles.text}>.</span>
               </div>
-            </span>{" "}
+            </span>
             {/* submit */}
             <div className={styles.submitContainer}>
               {isLoading ? (

@@ -200,11 +200,20 @@
 @media screen and (max-width: 650px) {
   .formContainer {
     form {
+      padding-block: 100px;
+
       .inlineForm {
         padding: 20px;
+        font-size: 32px;
+
+        .text {
+          height: 50px;
+        }
 
         input,
         select {
+          height: 50px;
+          font-size: 32px;
           display: block !important;
           max-width: 100% !important;
           margin-bottom: 30px;
@@ -215,5 +224,18 @@
 
   .result {
     margin-inline: 0;
+
+    .game {
+      padding: 20px;
+
+      h2 {
+        font-size: 32px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+    }
   }
 }
