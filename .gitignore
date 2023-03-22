@@ -105,3 +105,4 @@ dist
 .history/
 storybook-static/
 .env*
+notes.txt
