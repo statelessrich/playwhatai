@@ -61,7 +61,7 @@ export default async function (req, res) {
 }
 
 function generatePrompt(game, genre, platform, age) {
-  return `Suggest 3 video games that are most similar to ${game} in the ${genre} genre (optional) for the ${platform} platform (optional) that is a ${age} game (optional) and for each provide a paragraph explaining why it's similar. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "description": "[description of how game is similar to ${game}]"}.
+  return `Suggest 1 video game that is most similar to ${game} in the ${genre} genre (optional) for the ${platform} platform (optional) that is a ${age} game (optional) and for each provide a paragraph explaining why it's similar. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "description": "[description of how game is similar to ${game}]"}.
 
   game: Super Mario RPG, genre: RPG, age: classic.
   response:{"games":[{"name": "<name>","description": "<description>"}]}`;
