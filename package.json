@@ -1,5 +1,5 @@
 {
-  "name": "openai-quickstart-node",
+  "name": "playwhatai",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://statelessrich.github.io/playwhatai",
@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "predeploy": "npm run build",
+    "predeploy": "npm run export",
     "deploy": "gh-pages -d out",
     "export": "next export"
   },
