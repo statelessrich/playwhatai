@@ -1,5 +1,7 @@
 import Head from "next/head";
 import { useState } from "react";
+import PacmanLoader from "react-spinners/PacmanLoader";
+
 import styles from "./index.module.scss";
 
 export default function Home() {
@@ -8,29 +10,43 @@ export default function Home() {
   const [platformInput, setPlatformInput] = useState("");
   const [ageInput, setAgeInput] = useState("modern");
   const [result, setResult] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    position: "absolute",
+    // borderColor: "red",
+  };
 
   async function onSubmit(event) {
     event.preventDefault();
+    setIsLoading(true);
+    setResult("");
+
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ game: gameInput, genre: genreInput, platform: platformInput, age: ageInput }),
+        body: JSON.stringify({ game: gameInput, age: ageInput }),
       });
 
       const data = await response.json();
+
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
+      // replace new line characters
       const formattedResult = data.result.replace(/\n/g, "");
       setResult(JSON.parse(formattedResult));
+      console.log(JSON.parse(formattedResult));
+      setIsLoading(false);
     } catch (error) {
-      // Consider implementing your own error handling logic here
       console.error(error);
-      alert(error.message);
+      setIsLoading(false);
     }
   }
 
@@ -70,8 +86,9 @@ export default function Home() {
                   value={gameInput}
                   onChange={(e) => setGameInput(e.target.value)}
                 />
+                <span className={styles.text}>.</span>
               </div>
-              <div>
+              {/* <div>
                 <span className={styles.text}> in the</span>{" "}
                 <input
                   className={`${styles.inline} ${styles.genre}`}
@@ -82,7 +99,7 @@ export default function Home() {
                   onChange={(e) => setGenreInput(e.target.value)}
                 />{" "}
                 genre.
-              </div>
+              </div> */}
               {/* <input
               type="text"
               name="platform"
@@ -91,7 +108,22 @@ export default function Home() {
               onChange={(e) => setPlatformInput(e.target.value)}
             /> */}
             </span>{" "}
-            <input type="submit" className={styles.submit} value="recommend me" />
+            <div className={styles.submitContainer}>
+              {isLoading ? (
+                <>
+                  <input type="submit" className={`${styles.submit} ${styles.loading}`} value=""></input>
+
+                  <PacmanLoader
+                    // loading={isLoading}
+                    cssOverride={override}
+                    className={styles.loader}
+                    color="#484848"
+                  />
+                </>
+              ) : (
+                <input type="submit" className={styles.submit} value="recommend me" />
+              )}
+            </div>
           </form>
         </div>
 
@@ -102,13 +134,27 @@ export default function Home() {
 }
 
 function formatResponse(result) {
-  return result?.games?.map((game) => (
-    <div className={styles.game} key={game.name}>
-      {/* <div className={styles.gameImg}>
+  return (
+    <>
+      {result?.games?.map((game) => (
+        <div className={styles.game} key={game.name}>
+          {/* <div className={styles.gameImg}>
         <img src={game.img} />
       </div> */}
-      <div className={styles.gameName}>{game.name}</div>
-      <div className={styles.gameDescription}>{game.description}</div>
-    </div>
-  ));
+          <h2>{game.name}</h2>
+          <p>{game.description}</p>
+        </div>
+      ))}
+
+      {result?.other && (
+        <div className={styles.game}>
+          <h2>Others</h2>
+
+          {result.other.map((game) => (
+            <p key={game}>{game}</p>
+          ))}
+        </div>
+      )}
+    </>
+  );
 }

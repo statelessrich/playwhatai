@@ -17,9 +17,9 @@ export default async function (req, res) {
   }
 
   const game = req.body.game || "";
-  const genre = req.body.genre || "";
-  const platform = req.body.platform || "";
   const age = req.body.age || "";
+  // const genre = req.body.genre || "";
+  // const platform = req.body.platform || "";
 
   if (game.trim().length === 0) {
     res.status(400).json({
@@ -33,13 +33,13 @@ export default async function (req, res) {
   try {
     // res.status(200).json({
     //   result:
-    //     '\n\n{"games":[{"name": "Paper Mario", "description": "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario\'s adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG."}, \n{"name": "Mario & Luigi: Superstar Saga", "description": "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG."}, \n{"name": "Super Mario RPG: Legend of the Seven Stars", "description": "Super Mario RPG: Legend of the Seven Stars is the game that started it all, and is the original Mario RPG. The game follows the same basic premise as Mario RPG, with players exploring levels, solving puzzles and fighting enemies in turn-based combat. The game also features a unique art style and a variety of characters to interact with, just like in Mario RPG."}]\n}',
+    //     '\n\n{"games":[{"name": "Paper Mario", "description": "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario\'s adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG."}, \n{"name": "Mario & Luigi: Superstar Saga", "description": "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG."}], "other": ["Chrono Trigger","Earthbound","Dragon Quest"]\n}',
     // });
     // return;
 
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(game, genre, platform, age),
+      prompt: generatePrompt(game, age),
       temperature: 0.3,
       max_tokens: 3000,
     });
@@ -60,11 +60,14 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(game, genre, platform, age) {
-  return `Suggest 1 video game that is most similar to ${game} in the ${genre} genre (optional) for the ${platform} platform (optional) that is a ${age} game (optional) and for each provide a paragraph explaining why it's similar. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "description": "[description of how game is similar to ${game}]"}.
+function generatePrompt(game, age) {
+  return `Suggest 2 video games, in order, that are most similar to ${game} that is a ${age} game and for each provide a paragraph explaining why it's similar. A classic game is one released before 2006, a modern game is one released after 2005. Then suggest a list of the 3 next most similar games. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "description": "[description of how game is similar to ${game}]"}], "other": [array of 3 other similar games]}.
 
-  game: Super Mario RPG, genre: RPG, age: classic.
-  response:{"games":[{"name": "<name>","description": "<description>"}]}`;
+example response:{"games":[{"name": "<name>","description": "<description>",
+}],"other":["<other1>","<other2>","<other3>"]}`;
+  //  and provide a url to an image of the game from a source other than upload.wikimedia.org.
+  //  "img":"[url to an image of the game]"
+  // "img":"<url>"
 }
 
 // Game: Grand Theft Auto III
