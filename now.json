@@ -1,6 +1,11 @@
 {
   "version": 2,
+  "name": "my-nextjs-app",
   "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    },
     {
       "src": "pages/api/**/*.js",
       "use": "@now/node",
