@@ -9,7 +9,7 @@ export default function Home() {
   const [gameInput, setGameInput] = useState("Super Mario RPG");
   const [result, setResult] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [pageReady, setPageReady] = useState(true);
+  const [pageReady, setPageReady] = useState(false);
   const [heroImage, setHeroImage] = useState();
   const [showError, setShowError] = useState(false);
   const ageOptions = [
