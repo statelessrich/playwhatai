@@ -1,11 +1,12 @@
 playwhatai
-An app that recommends video games using OpenAI. [Demo](https://playwhatai.vercel.app/)
+An app that recommends video games using OpenAI.  
+[Demo](https://playwhatai.vercel.app/)
 
-install
+install  
 ```npm i```
 
-run
+run  
 ```npm run dev```
 
-build
+build  
 ```npm run build```
