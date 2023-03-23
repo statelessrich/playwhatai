@@ -149,6 +149,7 @@ export default function Home() {
                         fontWeight: "bold",
                         marginBottom: "0",
                         paddingLeft: "5px",
+                        marginBottom: "30px",
                       }),
                       indicatorSeparator: (baseStyles, state) => ({
                         ...baseStyles,

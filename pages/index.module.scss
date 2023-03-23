@@ -220,23 +220,24 @@
 @media screen and (max-width: 650px) {
   .main .formContainer {
     form {
-      padding-block: 100px;
+      padding-block: 75px;
 
       .inlineForm {
         padding: 20px;
-        font-size: 32px;
 
         .text {
-          height: 50px;
+          height: 77px;
         }
 
-        input,
-        .select {
-          height: 50px;
-          font-size: 32px;
-          display: block !important;
-          max-width: 100% !important;
-          margin-bottom: 30px;
+        div {
+          input,
+          .select,
+          .game {
+            height: 77px;
+            display: block;
+            max-width: 100%;
+            margin-bottom: 30px;
+          }
         }
       }
 
@@ -245,26 +246,26 @@
         line-height: 1.5;
       }
     }
+  }
 
-    .result {
-      margin-inline: 0;
+  .result {
+    margin-inline: 0;
 
-      .game {
-        padding: 20px;
+    .game {
+      padding: 20px;
 
-        h2 {
-          font-size: 32px;
-          word-wrap: break-word;
+      h2 {
+        font-size: 32px;
+        word-wrap: break-word;
 
-          small {
-            word-wrap: break-word;
-          }
+        small {
+          white-space: normal;
         }
+      }
 
-        p {
-          font-size: 16px;
-          line-height: 1.5;
-        }
+      p {
+        font-size: 16px;
+        line-height: 1.5;
       }
     }
   }
