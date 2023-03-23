@@ -6,10 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "predeploy": "npm run export",
-    "deploy": "gh-pages --dotfiles -d out",
-    "export": "next export"
+    "start": "next start"
   },
   "dependencies": {
     "@vercel/next": "^3.6.7",
