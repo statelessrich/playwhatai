@@ -2,7 +2,7 @@
   "name": "playwhatai",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://statelessrich.github.io/playwhatai",
+  "homepage": "https://playwhatai.vercel.app/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -23,7 +23,6 @@
     "node": ">=14.6.0"
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0",
     "sass": "^1.59.3"
   }
 }
