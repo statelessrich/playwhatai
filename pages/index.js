@@ -215,10 +215,8 @@ function formatResponse(result, screenshot) {
       {result?.games?.map((game) => (
         <div className={styles.game} key={game.name}>
           <div className={styles.text}>
-            <h2>
-              {game.name}&nbsp;
-              <small>{game.platform}</small>
-            </h2>
+            <h2>{game.name}&nbsp;</h2>
+            <p className={styles.platform}>{game.platform}</p>
             <p>{game.description}</p>
           </div>
         </div>
