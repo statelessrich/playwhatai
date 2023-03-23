@@ -134,12 +134,13 @@ export default function Home() {
                       container: (baseStyles, state) => ({
                         ...baseStyles,
                         display: "inline-block",
+                        marginBottom: "30px",
                       }),
-                      control: (baseStyles, state) => ({
+                      control: (baseStyles) => ({
                         ...baseStyles,
                         width: "100%",
                         border: "none",
-                        borderBottom: "3px solid #000",
+                        borderBottom: "3px solid #353740",
                         borderRadius: "0",
                         height: "80px",
                         padding: "0",
@@ -149,11 +150,24 @@ export default function Home() {
                         fontWeight: "bold",
                         marginBottom: "0",
                         paddingLeft: "5px",
-                        marginBottom: "30px",
+                        ":hover": {
+                          borderBottomColor: "inherit",
+                        },
                       }),
-                      indicatorSeparator: (baseStyles, state) => ({
+                      indicatorSeparator: (baseStyles) => ({
                         ...baseStyles,
                         display: "none",
+                      }),
+                      singleValue: (baseStyles) => ({
+                        ...baseStyles,
+                        color: "rgb(72, 72, 72)",
+                      }),
+                      dropdownIndicator: (provided) => ({
+                        ...provided,
+                        color: "rgb(72, 72, 72)",
+                        ":hover": {
+                          color: "inherit",
+                        },
                       }),
                     }}
                   />
