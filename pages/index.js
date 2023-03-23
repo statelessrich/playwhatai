@@ -1,17 +1,22 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import Select from "react-select";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 import styles from "./index.module.scss";
 
 export default function Home() {
   const [gameInput, setGameInput] = useState("Super Mario RPG");
-  const [ageInput, setAgeInput] = useState("modern");
   const [result, setResult] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [pageReady, setPageReady] = useState(false);
+  const [pageReady, setPageReady] = useState(true);
   const [heroImage, setHeroImage] = useState();
   const [showError, setShowError] = useState(false);
+  const ageOptions = [
+    { value: "classic", label: "classic" },
+    { value: "modern", label: "modern" },
+  ];
+  const [ageInput, setAgeInput] = useState(ageOptions[0]);
 
   const override = {
     display: "block",
@@ -60,7 +65,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ game: gameInput, age: ageInput }),
+        body: JSON.stringify({ game: gameInput, age: ageInput.value }),
       });
 
       const data = await response.json();
@@ -113,15 +118,36 @@ export default function Home() {
                 {/* age */}
                 <div>
                   <span className={styles.text}>I wanna play a</span>{" "}
-                  <select
-                    name="age"
-                    className={styles.age}
-                    value={ageInput}
-                    onChange={(e) => setAgeInput(e.target.value)}
-                  >
-                    <option value="classic">classic</option>
-                    <option value="modern">modern</option>
-                  </select>{" "}
+                  <Select
+                    options={ageOptions}
+                    defaultValue={ageOptions[0]}
+                    onChange={setAgeInput}
+                    styles={{
+                      container: (baseStyles, state) => ({
+                        ...baseStyles,
+                        display: "inline-block",
+                      }),
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        width: "100%",
+                        border: "none",
+                        borderBottom: "3px solid #000",
+                        borderRadius: "0",
+                        height: "80px",
+                        padding: "0",
+                        background: "transparent",
+                        fontSize: "42px",
+                        color: "rgb(72, 72, 72)",
+                        fontWeight: "bold",
+                        marginBottom: "0",
+                        paddingLeft: "5px",
+                      }),
+                      indicatorSeparator: (baseStyles, state) => ({
+                        ...baseStyles,
+                        display: "none",
+                      }),
+                    }}
+                  />
                 </div>
                 {/* name */}
                 <div>
