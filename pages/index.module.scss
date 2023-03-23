@@ -254,6 +254,11 @@
 
         h2 {
           font-size: 32px;
+          word-wrap: break-word;
+
+          small {
+            word-wrap: break-word;
+          }
         }
 
         p {

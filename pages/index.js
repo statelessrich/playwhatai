@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
@@ -17,6 +17,7 @@ export default function Home() {
     { value: "modern", label: "modern" },
   ];
   const [ageInput, setAgeInput] = useState(ageOptions[0]);
+  const resultRef = useRef();
 
   const override = {
     display: "block",
@@ -46,6 +47,13 @@ export default function Home() {
 
     getHeroImage();
   }, []);
+
+  // scroll to results
+  useEffect(() => {
+    if (result) {
+      resultRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [result]);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -192,7 +200,9 @@ export default function Home() {
           </div>
         )}
 
-        <div className={styles.result}>{formatResponse(result, heroImage)}</div>
+        <div ref={resultRef} className={styles.result}>
+          {formatResponse(result, heroImage)}
+        </div>
       </main>
     </div>
   );
