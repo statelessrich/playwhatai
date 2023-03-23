@@ -44,6 +44,11 @@ export default function Home() {
 
   async function onSubmit(event) {
     event.preventDefault();
+
+    if (gameInput.trim().length === 0) {
+      return;
+    }
+
     setIsLoading(true);
     setResult("");
     setShowError(false);
@@ -73,6 +78,15 @@ export default function Home() {
       setIsLoading(false);
       setShowError(true);
     }
+  }
+
+  // check if game input exists
+  function isInputValid() {
+    if (gameInput.trim().length === 0) {
+      return false;
+    }
+
+    return true;
   }
 
   return (
@@ -113,10 +127,9 @@ export default function Home() {
                 <div>
                   <span className={styles.text}>game like</span>{" "}
                   <input
-                    className={`${styles.inline} ${styles.game}`}
+                    className={`${styles.game}`}
                     type="text"
                     name="game"
-                    placeholder="game"
                     value={gameInput}
                     onChange={(e) => setGameInput(e.target.value)}
                   />
@@ -132,7 +145,12 @@ export default function Home() {
                     <PacmanLoader cssOverride={override} className={styles.loader} color="#484848" />
                   </>
                 ) : (
-                  <input type="submit" className={styles.submit} value="recommend me" />
+                  <input
+                    type="submit"
+                    disabled={!isInputValid()}
+                    className={styles.submit}
+                    value="recommend me"
+                  />
                 )}
               </div>
 
