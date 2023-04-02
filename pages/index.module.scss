@@ -220,56 +220,61 @@
 
     form {
       padding-inline: 0;
+      max-width: 95%;
     }
   }
 }
 
 // mobile
 @media screen and (max-width: 650px) {
-  .main .formContainer {
-    form {
-      padding-block: 75px;
+  .main {
+    .formContainer {
+      form {
+        padding-block: 75px;
+        font-size: 36px;
 
-      .inlineForm {
-        padding: 20px;
+        .inlineForm {
+          padding: 20px;
 
-        .text {
-          height: 77px;
-        }
-
-        div {
-          input,
-          .select,
-          .game {
+          .text {
             height: 77px;
-            display: block;
-            max-width: 100%;
-            margin-bottom: 30px;
+          }
+
+          div {
+            input,
+            .select,
+            .game {
+              height: 60px;
+              display: block;
+              max-width: 100%;
+              margin-bottom: 30px;
+              font-size: 36px;
+            }
           }
         }
-      }
 
-      .error {
-        font-size: 28px;
-        line-height: 1.5;
+        .error {
+          font-size: 28px;
+          line-height: 1.5;
+        }
       }
     }
-  }
 
-  .result {
-    margin-inline: 0;
+    .result {
+      margin-inline: 0;
 
-    .game {
-      padding: 20px;
+      .game {
+        padding: 20px;
 
-      h2 {
-        font-size: 32px;
-        word-wrap: break-word;
-      }
+        h2 {
+          font-size: 32px;
+          word-wrap: break-word;
+        }
 
-      p {
-        font-size: 16px;
-        line-height: 1.5;
+        p {
+          font-size: 16px;
+          line-height: 1.5;
+        }
       }
     }
   }
