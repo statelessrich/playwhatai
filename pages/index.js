@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import PacmanLoader from "react-spinners/PacmanLoader";
@@ -116,14 +117,14 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={`${styles.header} ${pageReady ? "" : styles.isLoading}`}>
-          <img src="/logo.png" className={styles.icon} alt="play what logo" />
+          <Image src="/logo.png" className={styles.icon} alt="play what logo" width={130} height={130} />
           <h1>playwhat</h1>
         </div>
 
         {pageReady && (
           <div className={styles.formContainer}>
             {/* hero img */}
-            {heroImage && <img src={heroImage} alt="playwhat" />}
+            {heroImage && <Image src={heroImage} alt="playwhat" width={1920} height={1080} />}
 
             {/* form */}
             <form onSubmit={onSubmit}>
