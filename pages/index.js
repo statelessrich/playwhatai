@@ -1,22 +1,27 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useContext, useEffect, useRef, useState } from "react";
-import Form from "../components/Form";
+import { useEffect, useState } from "react";
+import useAppStore from "../lib/store";
+import Form from "../components/form";
 import styles from "../styles/index.module.scss";
-import { Context } from "../lib/context";
+import Response from "../components/response";
 
 export default function Home() {
-  // const [gameInput, setGameInput] = useState("Super Mario RPG");
   const [result, setResult] = useState(null);
-  const resultRef = useRef();
-  const { isLoading, pageReady, heroImage, showError, setIsLoading, setHeroImage, setPageReady } =
-    useContext(Context);
+  const isLoading = useAppStore((state) => state.isLoading);
+  const pageReady = useAppStore((state) => state.pageReady);
+  const heroImage = useAppStore((state) => state.heroImage);
+  const setIsLoading = useAppStore((state) => state.setIsLoading);
+  const setHeroImage = useAppStore((state) => state.setHeroImage);
+  const setPageReady = useAppStore((state) => state.setPageReady);
+  const setShowError = useAppStore((state) => state.setShowError);
+  const setGameInput = useAppStore((state) => state.setGameInput);
 
   // on load get random game screenshot for hero image
   useEffect(() => {
-    async function getHeroImage() {
+    async function getRandomGame() {
       try {
-        const response = await fetch("/api/heroImage", {
+        const response = await fetch("/api/randomGame", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -25,6 +30,7 @@ export default function Home() {
 
         const data = await response.json();
         setHeroImage(data.image);
+        setGameInput(data.name);
         setPageReady(true);
       } catch (error) {
         setIsLoading(false);
@@ -32,15 +38,8 @@ export default function Home() {
       }
     }
 
-    getHeroImage();
+    getRandomGame();
   }, []);
-
-  // scroll to results
-  useEffect(() => {
-    if (result) {
-      resultRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [result]);
 
   async function onSubmit(event, gameInput, ageInput) {
     event.preventDefault();
@@ -94,42 +93,26 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={`${styles.header} ${pageReady ? "" : styles.isLoading}`}>
-          <Image src="/logo.png" className={styles.icon} alt="play what logo" width={130} height={130} />
+          {/* logo */}
+          <Image
+            priority
+            src="/logo.png"
+            className={styles.icon}
+            alt="play what logo"
+            width={130}
+            height={130}
+          />
+
+          {/* title */}
           <h1>playwhat</h1>
         </div>
 
+        {/* form */}
         {heroImage && <Form onSubmit={onSubmit} heroImage={heroImage} isLoading={isLoading} />}
 
-        <div ref={resultRef} className={styles.result}>
-          {formatResponse(result, heroImage)}
-        </div>
+        {/* response */}
+        {result && <Response result={result} />}
       </main>
     </div>
-  );
-}
-
-function formatResponse(result, screenshot) {
-  return (
-    <>
-      {result?.games?.map((game) => (
-        <div className={styles.game} key={game.name}>
-          <div className={styles.text}>
-            <h2>{game.name}&nbsp;</h2>
-            <p className={styles.platform}>{game.platform}</p>
-            <p>{game.description}</p>
-          </div>
-        </div>
-      ))}
-
-      {result?.other && (
-        <div className={styles.game}>
-          <h2>Others</h2>
-
-          {result.other.map((game) => (
-            <p key={game}>{game}</p>
-          ))}
-        </div>
-      )}
-    </>
   );
 }

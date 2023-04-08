@@ -1,22 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import Image from "next/image";
 import styles from "../styles/form.module.scss";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import { Context } from "../lib/context";
+import useAppStore from "../lib/store";
 
-export default function Form({ heroImage, onSubmit, isLoading }) {
-  const context = useContext(Context);
-
+export default function Form({ onSubmit }) {
   const ageOptions = [
     { value: "classic", label: "classic" },
     { value: "modern", label: "modern" },
   ];
-
   const [ageInput, setAgeInput] = useState(ageOptions[0]);
-  const [gameInput, setGameInput] = useState("Super Mario RPG");
+  const isLoading = useAppStore((state) => state.isLoading);
+  const heroImage = useAppStore((state) => state.heroImage);
+  const showError = useAppStore((state) => state.showError);
+  const gameInput = useAppStore((state) => state.gameInput);
+  const setGameInput = useAppStore((state) => state.setGameInput);
 
-  const override = {
+  const loaderStyleOverride = {
     display: "block",
     margin: "0 auto",
     position: "absolute",
@@ -34,7 +35,7 @@ export default function Form({ heroImage, onSubmit, isLoading }) {
   return (
     <div className={styles.formContainer}>
       {/* hero img */}
-      <Image src={heroImage} alt="playwhat" width={1920} height={1080} />
+      <Image priority src={heroImage} alt="playwhat" width={1920} height={1080} />
 
       {/* form */}
       <form onSubmit={(e) => onSubmit(e, gameInput, ageInput)}>
@@ -107,7 +108,7 @@ export default function Form({ heroImage, onSubmit, isLoading }) {
             <>
               <input type="submit" className={`${styles.submit} ${styles.loading}`} value=""></input>
 
-              <PacmanLoader cssOverride={override} className={styles.loader} color="#484848" />
+              <PacmanLoader cssOverride={loaderStyleOverride} className={styles.loader} color="#484848" />
             </>
           ) : (
             <input type="submit" disabled={!isInputValid()} className={styles.submit} value="recommend me" />
