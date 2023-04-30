@@ -5,8 +5,20 @@ import useAppStore from "../lib/store";
 import Form from "../components/form";
 import styles from "../styles/index.module.scss";
 import Response from "../components/response";
+import getRandomGame from "./api/randomGame";
 
-export default function Home() {
+// on load get random game data from server
+export async function getServerSideProps() {
+  const data = await getRandomGame();
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
+
+export default function Home({ data }) {
   const [result, setResult] = useState(null);
   const isLoading = useAppStore((state) => state.isLoading);
   const pageReady = useAppStore((state) => state.pageReady);
@@ -17,28 +29,11 @@ export default function Home() {
   const setShowError = useAppStore((state) => state.setShowError);
   const setGameInput = useAppStore((state) => state.setGameInput);
 
-  // on load get random game screenshot for hero image
+  // set random game name and image from server props on page load
   useEffect(() => {
-    async function getRandomGame() {
-      try {
-        const response = await fetch("/api/randomGame", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-        setHeroImage(data.image);
-        setGameInput(data.name);
-        setPageReady(true);
-      } catch (error) {
-        setIsLoading(false);
-        setPageReady(true);
-      }
-    }
-
-    getRandomGame();
+    setHeroImage(data.image);
+    setGameInput(data.name);
+    setPageReady(true);
   }, []);
 
   async function onSubmit(event, gameInput, ageInput) {
