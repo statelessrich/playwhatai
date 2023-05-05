@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -8,7 +10,7 @@ import Response from "../components/response";
 import getRandomGame from "./api/randomGame";
 
 // on load get random game data from server
-export async function getServerSideProps() {
+export async function getServerProps() {
   const data = await getRandomGame();
 
   return {
@@ -31,9 +33,14 @@ export default function Home({ data }) {
 
   // set random game name and image from server props on page load
   useEffect(() => {
-    setHeroImage(data.image);
-    setGameInput(data.name);
-    setPageReady(true);
+    async function loadData() {
+      const data = await getRandomGame();
+      setHeroImage(data.image);
+      setGameInput(data.name);
+      setPageReady(true);
+    }
+
+    loadData();
   }, []);
 
   async function onSubmit(event, gameInput, ageInput) {
@@ -100,6 +107,7 @@ export default function Home({ data }) {
 
           {/* title */}
           <h1>playwhat</h1>
+          <h1 className="text-3xl font-bold underline">Hello, Next.js!</h1>
         </div>
 
         {/* form */}
