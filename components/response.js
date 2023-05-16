@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import styles from "../styles/response.module.scss";
 
 export default function Response({ result }) {
   const resultRef = useRef();
@@ -10,30 +9,32 @@ export default function Response({ result }) {
   }, []);
 
   return (
-    <div className={styles.result} ref={resultRef}>
+    <div className="mt-10 md:max-w-5xl md:mx-auto" ref={resultRef}>
       {/* list of games */}
       {result?.games?.map((game) => (
-        <div className={styles.game} key={game.name}>
-          <div className={styles.text}>
+        <div className="p-10 mb-10 bg-white" key={game.name}>
+          <div>
             {/* name */}
-            <h2>{game.name}&nbsp;</h2>
+            <h2 className="font-bold text-3xl break-words">{game.name}&nbsp;</h2>
 
             {/* platform */}
-            <p className={styles.platform}>{game.platform}</p>
+            <p className="text-sm leading-3 font-bold pt-3">{game.platform}</p>
 
             {/* description */}
-            <p>{game.description}</p>
+            <p className="pt-5 leading-10 text-2xl">{game.description}</p>
           </div>
         </div>
       ))}
 
       {/* other games */}
       {result?.other && (
-        <div className={styles.game}>
-          <h2>Others</h2>
+        <div className="p-10 bg-white">
+          <h2 className="font-bold text-3xl">Others</h2>
 
           {result.other.map((game) => (
-            <p key={game}>{game}</p>
+            <p className="pt-3 text-2xl" key={game}>
+              {game}
+            </p>
           ))}
         </div>
       )}

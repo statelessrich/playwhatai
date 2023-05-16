@@ -108,3 +108,4 @@ storybook-static/
 notes.txt
 out/
 .vercel
+.vscode/

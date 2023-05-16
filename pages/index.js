@@ -1,9 +1,7 @@
-import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useAppStore from "../lib/store";
 import Form from "../components/form";
-import styles from "../styles/index.module.scss";
 import Response from "../components/response";
 import getRandomGame from "./api/randomGame";
 
@@ -19,24 +17,50 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ data }) {
+  const test = 0;
+  const testResult = {
+    games: [
+      {
+        name: "Fallout 3",
+        platform: "Super Nintendo Entertainment System (SNES)",
+        description:
+          "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario's adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG.",
+      },
+      {
+        name: "Mario & Luigi: Superstar Saga",
+        platform: "DS",
+        description:
+          "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG.",
+      },
+    ],
+    other: ["Chrono Trigger", "Earthbound", "Dragon Quest"],
+  };
   const [result, setResult] = useState(null);
-  const isLoading = useAppStore((state) => state.isLoading);
-  const pageReady = useAppStore((state) => state.pageReady);
-  const heroImage = useAppStore((state) => state.heroImage);
-  const setIsLoading = useAppStore((state) => state.setIsLoading);
-  const setHeroImage = useAppStore((state) => state.setHeroImage);
-  const setPageReady = useAppStore((state) => state.setPageReady);
-  const setShowError = useAppStore((state) => state.setShowError);
-  const setGameInput = useAppStore((state) => state.setGameInput);
+  const {
+    isLoading,
+    pageReady,
+    heroImage,
+    setIsLoading,
+    setHeroImage,
+    setPageReady,
+    setShowError,
+    setGameInput,
+  } = useAppStore();
 
   // set random game name and image from server props on page load
   useEffect(() => {
-    setHeroImage(data.image);
-    setGameInput(data.name);
+    setHeroImage(data?.image || "/supermariorpg.png");
+    setGameInput(data?.name || "Super Mario RPG");
     setPageReady(true);
+
+    if (test) {
+      setResult(testResult);
+    }
   }, []);
 
-  async function onSubmit(event, gameInput, ageInput) {
+  // submit form data, use to generate prompt and submit to openai.
+  // memoized to prevent recreation on re-render
+  const onSubmit = useCallback(async (event, gameInput, ageInput) => {
     event.preventDefault();
 
     if (gameInput.trim().length === 0) {
@@ -72,42 +96,23 @@ export default function Home({ data }) {
       setIsLoading(false);
       setShowError(true);
     }
-  }
+  });
 
   return (
-    <div>
-      <Head>
-        <title>playwhat</title>
-        <meta property="og:title" content="playwhat" key="title" />
-        <meta property="og:description" content="Video game recommendations using AI." />
-        <meta property="og:keywords" content="video games, AI, gaming" />
-        <meta property="og:image" content="https://playwhatai.vercel.app/social.png" />
-        <meta property="og:url" content="https://playwhatai.vercel.app/" />
-        <link rel="icon" href="/logo.png" />
-      </Head>
+    <div className="w-full">
+      <div className={`flex flex-col justify-center items-center ${pageReady ? "mt-20" : "h-screen"}`}>
+        {/* logo */}
+        <Image priority src="/logo.png" alt="play what logo" width={130} height={130} />
 
-      <main className={styles.main}>
-        <div className={`${styles.header} ${pageReady ? "" : styles.isLoading}`}>
-          {/* logo */}
-          <Image
-            priority
-            src="/logo.png"
-            className={styles.icon}
-            alt="play what logo"
-            width={130}
-            height={130}
-          />
+        {/* title */}
+        <h1 className="text-6xl -mt-5">playwhat</h1>
+      </div>
 
-          {/* title */}
-          <h1>playwhat</h1>
-        </div>
+      {/* form */}
+      {pageReady && <Form onSubmit={onSubmit} heroImage={heroImage} isLoading={isLoading} />}
 
-        {/* form */}
-        {heroImage && <Form onSubmit={onSubmit} heroImage={heroImage} isLoading={isLoading} />}
-
-        {/* response */}
-        {result && <Response result={result} />}
-      </main>
+      {/* response */}
+      {result && <Response result={result} />}
     </div>
   );
 }
