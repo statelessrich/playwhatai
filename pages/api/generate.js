@@ -62,10 +62,20 @@ export default async function (req, res) {
 }
 
 function generatePrompt(game, age) {
-  return `Suggest 2 video games, in order, that are most similar to ${game} that is a ${age} game and for each provide the platform and a paragraph explaining why it's similar. A classic game is one released before 2006, a modern game is one released after 2005. Then suggest a list of the 3 next most similar games. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on] "description": "[description of how game is similar to ${game}]"}], "other": [array of 3 other similar games]}.
+  // optionally get list of 3 other game recommendations
+  const withOther = 1;
 
-example response:{"games":[{"name": "<name>","platform":"<platform>", "description": "<description>",
-}],"other":["<other1>","<other2>","<other3>"]}`;
+  const prompt = `Suggest 2 video games, that are most similar to ${game} that is a ${age} game and for each provide the platform and a paragraph explaining why it's similar. A classic game is one released before 2006, a modern game is one released after 2005. ${
+    withOther ? "Then suggest a list of the 3 next most similar games." : ""
+  } Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on] "description": "[description of how game is similar to ${game}]"}]${
+    withOther ? ', "other": [array of 3 other similar games]' : ""
+  }}.
+
+example response:{"games":[{"name": "<name>","platform":"<platform>", "description": "<description>"
+}]${withOther ? ',"other":["<other1>","<other2>","<other3>"]`}' : ""}`;
+
+  console.log(`prompt: ${prompt}`);
+  return prompt;
 }
 
 // Game: Grand Theft Auto III
