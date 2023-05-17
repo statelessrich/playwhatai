@@ -85,7 +85,7 @@ export default async function (req, res) {
 function getDescriptionsPrompt(game, recommendedGames) {
   const prompt = `For each recommended game, give a separate description of how it is similar to ${game}. Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
 
-  Recommended games: ${recommendedGames}
+  Recommended games: ${recommendedGames[0]}
   `;
 
   console.log(`prompt: ${prompt}`);
