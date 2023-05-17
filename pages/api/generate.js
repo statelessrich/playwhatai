@@ -44,6 +44,7 @@ export default async function (req, res) {
       temperature: 0.3,
       max_tokens: 3000,
     });
+
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
@@ -64,8 +65,13 @@ export default async function (req, res) {
 function generatePrompt(game, age) {
   // optionally get list of 3 other game recommendations
   const withOther = 0;
+  const withAge = 0;
 
-  const prompt = `Suggest 2 video games, that are most similar to ${game} that is a ${age} game and for each provide the platform and a paragraph explaining why it's similar. A classic game is one released before 2006, a modern game is one released after 2005. ${
+  const prompt = `Suggest 2 video games that are most similar to ${game} ${
+    withAge ? `that is a ${age} game` : ""
+  } and for each provide the platform and a paragraph explaining why it's similar. ${
+    withAge ? `A classic game is one released before 2006, a modern game is one released after 2005.` : ""
+  } ${
     withOther ? "Then suggest a list of the 3 next most similar games." : ""
   } Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on] "description": "[description of how game is similar to ${game}]"}]${
     withOther ? ', "other": [array of 3 other similar games]' : ""
