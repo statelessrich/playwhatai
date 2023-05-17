@@ -38,13 +38,35 @@ export default async function (req, res) {
       return;
     }
 
-    const completion = await openai.createCompletion({
+    const gamesCompletion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(game, age),
+      prompt: getGamesPrompt(game, age),
       temperature: 0.3,
       max_tokens: 3000,
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
+
+    const recommendedGames = JSON.parse(gamesCompletion.data.choices[0].text);
+    console.log(recommendedGames);
+
+    const descriptionsCompletion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: getDescriptionsPrompt(game, recommendedGames),
+      temperature: 0.3,
+      max_tokens: 3000,
+    });
+
+    const descriptions = JSON.parse(descriptionsCompletion.data.choices[0].text)?.descriptions;
+    console.log(descriptions);
+
+    // add descriptions to games object
+    descriptions.forEach((description) => {
+      const game = recommendedGames.games.find((game) => game.name === description.name);
+      if (game) {
+        game.description = description.description;
+      }
+    });
+
+    res.status(200).json(recommendedGames);
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -61,7 +83,7 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(game, age) {
+function getGamesPrompt(game, age) {
   // optionally get list of 3 other game recommendations
   const withOther = 0;
 
@@ -70,11 +92,26 @@ function generatePrompt(game, age) {
   example response:{"games":[{"name": "<name>","platform":"<platform>"}]}
 `;
 
-
   console.log(`prompt: ${prompt}`);
   return prompt;
 }
 
+function getDescriptionsPrompt(game, recommendedGames) {
+  // optionally get list of 3 other game recommendations
+  const withOther = 0;
+
+  const gameNames = recommendedGames.games.map((game) => game.name);
+
+  const prompt = `For each recommended game, give a separate description of how it is similar to ${game}. Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
+
+  Recommended games: ${gameNames}
+  `;
+
+  // example response:{[{"name": "<name>","platform":"<platform>"}]}
+
+  console.log(`prompt: ${prompt}`);
+  return prompt;
+}
 
 //  and for each provide the platform and a paragraph explaining why it's similar
 // ${

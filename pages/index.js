@@ -88,8 +88,8 @@ export default function Home({ data }) {
       }
 
       // replace new line characters
-      const formattedResult = JSON.parse(data.result.replace(/\n/g, ""));
-      setResult(formattedResult);
+      // const formattedResult = JSON.parse(data.result.replace(/\n/g, ""));
+      setResult(data);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
