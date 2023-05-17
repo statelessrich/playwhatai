@@ -28,7 +28,7 @@ export default async function (req, res) {
   }
 
   try {
-    const test = 1;
+    const test = 0;
 
     if (test) {
       res.status(200).json({

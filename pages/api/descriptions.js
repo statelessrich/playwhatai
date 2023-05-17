@@ -57,17 +57,8 @@ export default async function (req, res) {
     const description = completion.data.choices[0].text;
     console.log(description);
 
-    // add descriptions to games object
-    // descriptions.forEach((description) => {
-    //   const game = recommendedGames.games.find((game) => game.name === description.name);
-    //   if (game) {
-    //     game.description = description.description;
-    //   }
-    // });
-
     res.status(200).json(description);
   } catch (error) {
-    // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
       res.status(error.response.status).json(error.response.data);
@@ -84,10 +75,6 @@ export default async function (req, res) {
 
 function getDescriptionsPrompt(game, recommendedGame) {
   const prompt = `Explain how ${recommendedGame} is similar to ${game} in a short paragraph.`;
-
-  // Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
-
-  // Recommended games: ${recommendedGames[0]}
 
   console.log(`prompt: ${prompt}`);
   return prompt;
