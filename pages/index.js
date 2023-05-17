@@ -73,6 +73,26 @@ export default function Home({ data }) {
 
     // submit openai prompt
     try {
+      const game = "super mario rpg";
+      const age = "classic";
+
+      fetch("https://playwhatai-server-statelessrich.vercel.app/api/function", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ game, age }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+        return;
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
