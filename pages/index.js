@@ -109,7 +109,7 @@ export default function Home({ data }) {
   async function getGameDescription(game, recommendedGame) {
     let retries = 0;
 
-    while (retries < 2) {
+    while (retries < 5) {
       try {
         // submit openai prompt for game description
         const response = await fetch("/api/description", {
