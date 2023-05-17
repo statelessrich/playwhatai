@@ -145,7 +145,7 @@ export default function Form({ onSubmit }) {
             <input
               type="submit"
               disabled={!isInputValid()}
-              className={`${styles.submit} disabled:pointer-events-none focus:outline-blue-400`}
+              className={`${styles.submit}`}
               value="recommend"
             />
           )}

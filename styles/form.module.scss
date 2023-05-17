@@ -17,7 +17,7 @@
 
   .submit {
     // group tailwind classes to use on multiple submit components
-    @apply w-full max-w-xs py-3 rounded-2xl cursor-pointer font-bold;
+    @apply w-full max-w-xs py-3 rounded-2xl cursor-pointer font-bold disabled:pointer-events-none focus:outline-blue-400;
     background-color: rgba(255, 255, 255, 0.9);
     color: var(--text-color);
 

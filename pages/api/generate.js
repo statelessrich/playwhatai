@@ -65,18 +65,27 @@ function generatePrompt(game, age) {
   // optionally get list of 3 other game recommendations
   const withOther = 0;
 
-  const prompt = `Suggest 2 video games, that are most similar to ${game} that is a ${age} game and for each provide the platform and a paragraph explaining why it's similar. A classic game is one released before 2006, a modern game is one released after 2005. ${
-    withOther ? "Then suggest a list of the 3 next most similar games." : ""
-  } Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on] "description": "[description of how game is similar to ${game}]"}]${
-    withOther ? ', "other": [array of 3 other similar games]' : ""
-  }}.
+  const prompt = `Suggest 2 video games, that are most similar to ${game} that is a ${age} game. A classic game is one released before 2006, a modern game is one released after 2005. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on]"}]}.
+  
+  example response:{"games":[{"name": "<name>","platform":"<platform>"}]}
+`;
 
-example response:{"games":[{"name": "<name>","platform":"<platform>", "description": "<description>"
-}]${withOther ? ',"other":["<other1>","<other2>","<other3>"]`}' : ""}`;
 
   console.log(`prompt: ${prompt}`);
   return prompt;
 }
+
+
+//  and for each provide the platform and a paragraph explaining why it's similar
+// ${
+//     withOther ? "Then suggest a list of the 3 next most similar games." : ""
+//   }
+//  "description": "[description of how game is similar to ${game}]"
+// ${
+//     withOther ? ', "other": [array of 3 other similar games]' : ""
+//   }
+// , "description": "<description>"
+// ${withOther ? ',"other":["<other1>","<other2>","<other3>"]`:""}
 
 // Game: Grand Theft Auto III
 // Similar games:
