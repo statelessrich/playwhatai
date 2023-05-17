@@ -71,9 +71,9 @@ export default function Home({ data }) {
     setResult("");
     setShowError(false);
 
-    // submit openai prompt
     try {
-      const response = await fetch("/api/generate", {
+      // submit openai prompt for recommended games
+      const response = await fetch("/api/games", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,6 +86,32 @@ export default function Home({ data }) {
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
+
+      const recommendedGames = data.games.map((game) => game.name);
+
+      // submit openai prompt for game descriptions
+      const descriptionResponse = await fetch("/api/descriptions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ game: gameInput, recommendedGames }),
+      });
+
+      const descriptions = await descriptionResponse.json();
+      console.log(descriptions);
+
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+
+      // add descriptions to games object
+      descriptions.forEach((description) => {
+        const game = data.games.find((game) => game.name === description.name);
+        if (game) {
+          game.description = description.description;
+        }
+      });
 
       // replace new line characters
       // const formattedResult = JSON.parse(data.result.replace(/\n/g, ""));

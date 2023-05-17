@@ -48,24 +48,6 @@ export default async function (req, res) {
     const recommendedGames = JSON.parse(gamesCompletion.data.choices[0].text);
     console.log(recommendedGames);
 
-    const descriptionsCompletion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: getDescriptionsPrompt(game, recommendedGames),
-      temperature: 0.3,
-      max_tokens: 3000,
-    });
-
-    const descriptions = JSON.parse(descriptionsCompletion.data.choices[0].text)?.descriptions;
-    console.log(descriptions);
-
-    // add descriptions to games object
-    descriptions.forEach((description) => {
-      const game = recommendedGames.games.find((game) => game.name === description.name);
-      if (game) {
-        game.description = description.description;
-      }
-    });
-
     res.status(200).json(recommendedGames);
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
