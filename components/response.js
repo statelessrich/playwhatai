@@ -12,7 +12,7 @@ export default function Response({ result }) {
     <div className="mt-10 md:max-w-5xl md:mx-auto" ref={resultRef}>
       {/* list of games */}
       {result?.games?.map((game) => (
-        <div className="p-10 mb-10 bg-white" key={game.name}>
+        <div className="p-5 mb-10 bg-white" key={game.name}>
           <div>
             {/* name */}
             <h2 className="font-bold text-3xl break-words">{game.name}</h2>
@@ -21,7 +21,7 @@ export default function Response({ result }) {
             <p className="text-sm leading-3 font-bold pt-3">{game.platform}</p>
 
             {/* description */}
-            <p className="pt-5 leading-10 text-2xl">{game.description}</p>
+            <p className="pt-5 leading-7 text-md">{game.description}</p>
           </div>
         </div>
       ))}
