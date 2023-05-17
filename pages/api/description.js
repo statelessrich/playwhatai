@@ -61,7 +61,7 @@ export default async function (req, res) {
   } catch (error) {
     if (error.response) {
       console.log(error);
-      res.status(error.response.status).json({ error: { message: error.response.data } });
+      res.status(error.response.status).json(error.response.data);
     } else {
       console.error(`Error with OpenAI API request: ${error.message}`);
       res.status(500).json({

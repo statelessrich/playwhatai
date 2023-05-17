@@ -107,23 +107,35 @@ export default function Home({ data }) {
   });
 
   async function getGameDescription(game, recommendedGame) {
-    // submit openai prompt for game description
-    const response = await fetch("/api/description", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ game, recommendedGame }),
-    });
+    let retries = 0;
 
-    const description = await response.json();
-    console.log(description);
+    while (retries < 2) {
+      try {
+        // submit openai prompt for game description
+        const response = await fetch("/api/description", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ game, recommendedGame }),
+        });
 
-    if (response.status !== 200) {
-      throw data.error || new Error(`Request failed with status ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const description = await response.json();
+        console.log(description);
+
+        return description;
+      } catch (error) {
+        // if an error occurred during the api call (e.g. vercel timeout), try again
+        console.error(error);
+        retries++;
+      }
     }
 
-    return description;
+    throw new Error("An error occurred while fetching game description.");
   }
 
   return (
