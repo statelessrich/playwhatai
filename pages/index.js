@@ -107,9 +107,9 @@ export default function Home({ data }) {
   });
 
   async function getGameDescription(game, recommendedGame) {
-    let retries = 0;
+    let retries = 4;
 
-    while (retries < 5) {
+    while (retries >= 0) {
       try {
         // submit openai prompt for game description
         const response = await fetch("/api/description", {
@@ -131,7 +131,7 @@ export default function Home({ data }) {
       } catch (error) {
         // if an error occurred during the api call (e.g. vercel timeout), try again
         console.error(error);
-        retries++;
+        retries--;
       }
     }
 

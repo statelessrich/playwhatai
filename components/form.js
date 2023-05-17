@@ -28,7 +28,7 @@ export default function Form({ onSubmit }) {
   };
 
   // check if game input exists
-  function isInputValid() { 
+  function isInputValid() {
     if (gameInput.trim().length === 0) {
       return false;
     }
@@ -52,13 +52,14 @@ export default function Form({ onSubmit }) {
       {/* form */}
       <form
         onSubmit={(e) => onSubmit(e, gameInput, ageInput)}
-        className="relative flex flex-col mx-auto text-3xl py-32 px-0 max-w-[95%]"
+        className="relative flex flex-col mx-auto text-3xl py-32 px-0 max-w-[80%]"
       >
         <span className={`${styles.inlineForm} md:max-w-xl md:w-full md:mx-auto p-5`}>
           <div>
             <span className="block md:inline-block h-10">I wanna play a</span>{" "}
             {/* game age input (modern/classic) */}
             <Select
+              isSearchable={false}
               options={ageOptions}
               defaultValue={ageOptions[0]}
               onChange={setAgeInput}
