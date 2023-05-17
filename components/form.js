@@ -10,7 +10,7 @@ import useAppStore from "../lib/store";
  */
 export default function Form({ onSubmit }) {
   const ageOptions = [
-    { value: "classic", label: "classic" },
+    { value: "retro", label: "retro" },
     { value: "modern", label: "modern" },
   ];
   const [ageInput, setAgeInput] = useState(ageOptions[0]);
@@ -57,7 +57,7 @@ export default function Form({ onSubmit }) {
         <span className={`${styles.inlineForm} md:max-w-xl md:w-full md:mx-auto p-5`}>
           <div>
             <span className="block md:inline-block h-10">I wanna play a</span>{" "}
-            {/* game age input (modern/classic) */}
+            {/* game age input (retro/modern) */}
             <Select
               isSearchable={false}
               options={ageOptions}
