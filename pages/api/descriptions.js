@@ -16,7 +16,7 @@ export default async function (req, res) {
   }
 
   const game = req.body.game || "";
-  const recommendedGames = req.body.recommendedGames || "";
+  const recommendedGame = req.body.recommendedGame || "";
 
   if (game.trim().length === 0) {
     res.status(400).json({
@@ -27,7 +27,7 @@ export default async function (req, res) {
     return;
   }
 
-  if (!recommendedGames) {
+  if (!recommendedGame) {
     res.status(400).json({
       error: {
         message: "Missing recommended games",
@@ -47,15 +47,15 @@ export default async function (req, res) {
       return;
     }
 
-    const descriptionsCompletion = await openai.createCompletion({
+    const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: getDescriptionsPrompt(game, recommendedGames),
+      prompt: getDescriptionsPrompt(game, recommendedGame),
       temperature: 0.3,
       max_tokens: 3000,
     });
 
-    const descriptions = JSON.parse(descriptionsCompletion.data.choices[0].text)?.descriptions;
-    console.log(descriptions);
+    const description = completion.data.choices[0].text;
+    console.log(description);
 
     // add descriptions to games object
     // descriptions.forEach((description) => {
@@ -65,7 +65,7 @@ export default async function (req, res) {
     //   }
     // });
 
-    res.status(200).json(descriptions);
+    res.status(200).json(description);
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -82,11 +82,12 @@ export default async function (req, res) {
   }
 }
 
-function getDescriptionsPrompt(game, recommendedGames) {
-  const prompt = `For each recommended game, give a separate description of how it is similar to ${game}. Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
+function getDescriptionsPrompt(game, recommendedGame) {
+  const prompt = `Explain how ${recommendedGame} is similar to ${game} in a short paragraph.`;
 
-  Recommended games: ${recommendedGames[0]}
-  `;
+  // Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
+
+  // Recommended games: ${recommendedGames[0]}
 
   console.log(`prompt: ${prompt}`);
   return prompt;

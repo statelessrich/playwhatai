@@ -89,32 +89,14 @@ export default function Home({ data }) {
 
       const recommendedGames = data.games.map((game) => game.name);
 
-      // submit openai prompt for game descriptions
-      const descriptionResponse = await fetch("/api/descriptions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ game: gameInput, recommendedGames }),
-      });
+      // wait for all game descriptions to be fetched before updating state
+      await Promise.all(
+        recommendedGames.map(async (game) => {
+          const description = await getGameDescription(gameInput, game);
+          data.games.find((_game) => _game.name === game).description = description;
+        }),
+      );
 
-      const descriptions = await descriptionResponse.json();
-      console.log(descriptions);
-
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
-      }
-
-      // add descriptions to games object
-      descriptions.forEach((description) => {
-        const game = data.games.find((game) => game.name === description.name);
-        if (game) {
-          game.description = description.description;
-        }
-      });
-
-      // replace new line characters
-      // const formattedResult = JSON.parse(data.result.replace(/\n/g, ""));
       setResult(data);
       setIsLoading(false);
     } catch (error) {
@@ -123,6 +105,34 @@ export default function Home({ data }) {
       setShowError(true);
     }
   });
+
+  async function getGameDescription(game, recommendedGame) {
+    // submit openai prompt for game description
+    const response = await fetch("/api/descriptions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ game, recommendedGame }),
+    });
+
+    const description = await response.json();
+    console.log(description);
+
+    if (response.status !== 200) {
+      throw data.error || new Error(`Request failed with status ${response.status}`);
+    }
+
+    return description;
+
+    // add description to games object
+    // descriptions.forEach((description) => {
+    //   const game = data.games.find((game) => game.name === description.name);
+    //   if (game) {
+    //     game.description = description.description;
+    //   }
+    // });
+  }
 
   return (
     <div className="w-full">

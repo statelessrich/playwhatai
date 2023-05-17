@@ -28,12 +28,14 @@ export default async function (req, res) {
   }
 
   try {
-    const test = 0;
+    const test = 1;
 
     if (test) {
       res.status(200).json({
-        result:
-          '\n\n{"games":[{"name": "Fallout 3", "platform":"Super Nintendo Entertainment System (SNES)", "description": "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario\'s adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG."}, \n{"name": "Mario & Luigi: Superstar Saga", "platform":"DS", "description": "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG."}], "other": ["Chrono Trigger","Earthbound","Dragon Quest"]\n}',
+        games: [
+          { name: "Fallout 3", platform: "Super Nintendo Entertainment System (SNES)" },
+          { name: "Mario & Luigi: Superstar Saga", platform: "DS" },
+        ],
       });
       return;
     }
@@ -73,23 +75,6 @@ function getGamesPrompt(game, age) {
   
   example response:{"games":[{"name": "<name>","platform":"<platform>"}]}
 `;
-
-  console.log(`prompt: ${prompt}`);
-  return prompt;
-}
-
-function getDescriptionsPrompt(game, recommendedGames) {
-  // optionally get list of 3 other game recommendations
-  const withOther = 0;
-
-  const gameNames = recommendedGames.games.map((game) => game.name);
-
-  const prompt = `For each recommended game, give a separate description of how it is similar to ${game}. Give results in a javascript object like this: {"descriptions":[{"name": "[name of game]", "description":"[description]"}]}.
-
-  Recommended games: ${gameNames}
-  `;
-
-  // example response:{[{"name": "<name>","platform":"<platform>"}]}
 
   console.log(`prompt: ${prompt}`);
   return prompt;
