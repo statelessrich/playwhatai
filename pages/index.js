@@ -108,7 +108,7 @@ export default function Home({ data }) {
 
   async function getGameDescription(game, recommendedGame) {
     // submit openai prompt for game description
-    const response = await fetch("/api/descriptions", {
+    const response = await fetch("/api/description", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,14 +124,6 @@ export default function Home({ data }) {
     }
 
     return description;
-
-    // add description to games object
-    // descriptions.forEach((description) => {
-    //   const game = data.games.find((game) => game.name === description.name);
-    //   if (game) {
-    //     game.description = description.description;
-    //   }
-    // });
   }
 
   return (
