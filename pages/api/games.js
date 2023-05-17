@@ -70,7 +70,7 @@ function getGamesPrompt(game, age) {
   // optionally get list of 3 other game recommendations
   const withOther = 0;
 
-  const prompt = `Suggest 3 video games that are most similar to ${game} that have a release date ${age === 'retro' ? 'before 2005':'after 2004'}. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on]"}]}.
+  const prompt = `Suggest 2 video games that are most similar to ${game} that have a release date ${age === 'retro' ? 'before 2005':'after 2004'}. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on]"}]}.
   
   example response:{"games":[{"name": "<name>","platform":"<platform>"}]}
 `;
