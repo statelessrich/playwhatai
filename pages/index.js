@@ -63,6 +63,7 @@ export default function Home({ data }) {
   const onSubmit = useCallback(async (event, gameInput, ageInput) => {
     event.preventDefault();
 
+    // validate input
     if (gameInput.trim().length === 0) {
       return;
     }
@@ -72,7 +73,7 @@ export default function Home({ data }) {
     setShowError(false);
 
     try {
-      // submit openai prompt for recommended games
+      // get recommended games from openai
       const response = await fetch("/api/games", {
         method: "POST",
         headers: {
@@ -125,7 +126,6 @@ export default function Home({ data }) {
         }
 
         const description = await response.json();
-        console.log(description);
 
         return description;
       } catch (error) {
