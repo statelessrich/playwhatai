@@ -145,7 +145,7 @@ export default function Home({ data }) {
         <Image priority src="/logo.png" alt="play what logo" width={130} height={130} />
 
         {/* title */}
-        <h1 className="text-6xl -mt-5">playwhat</h1>
+        <h1 className="text-5xl -mt-5">playwhat</h1>
       </div>
 
       {/* form */}
