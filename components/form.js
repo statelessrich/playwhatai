@@ -14,11 +14,7 @@ export default function Form({ onSubmit }) {
     { value: "modern", label: "modern" },
   ];
   const [ageInput, setAgeInput] = useState(ageOptions[0]);
-  const isLoading = useAppStore((state) => state.isLoading);
-  const heroImage = useAppStore((state) => state.heroImage);
-  const showError = useAppStore((state) => state.showError);
-  const gameInput = useAppStore((state) => state.gameInput);
-  const setGameInput = useAppStore((state) => state.setGameInput);
+  const { isLoading, heroImage, showError, gameInput, setGameInput } = useAppStore();
 
   // override styles for react-spinner component
   const loaderStyleOverride = {
