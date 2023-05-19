@@ -107,6 +107,7 @@ export default function Home({ data }) {
     }
   });
 
+  // get game description from openai. because vercel's hobby tier has a 10s api call timeout, sometimes the call fails. so, we retry a few times before giving up and displaying an error message.
   async function getGameDescription(game, recommendedGame) {
     let retries = 4;
 
@@ -129,7 +130,7 @@ export default function Home({ data }) {
 
         return description;
       } catch (error) {
-        // if an error occurred during the api call (e.g. vercel timeout), try again
+        // try again
         console.error(error);
         retries--;
       }
