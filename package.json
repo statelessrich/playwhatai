@@ -29,6 +29,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
-    "sass": "^1.63.5"
+    "sass": "^1.63.5",
+    "tsconfig-paths-webpack-plugin": "^4.0.1"
   }
 }
