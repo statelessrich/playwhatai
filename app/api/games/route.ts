@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
@@ -5,40 +6,43 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
+export async function POST(request: Request) {
   if (!configuration.apiKey) {
-    res.status(500).json({
-      error: {
-        message: "OpenAI API key not configured",
-      },
-    });
-    return;
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "An error occurred during your request.",
+        },
+      }),
+    );
   }
 
-  const game = req.body.game || "";
-  const age = req.body.age || "";
+  const { game, age } = await request.json();
 
   // validate input
   if (game.trim().length === 0) {
-    res.status(400).json({
-      error: {
-        message: "Missing game",
-      },
-    });
-    return;
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: "Missing game",
+        },
+      }),
+      { status: 400 },
+    );
   }
 
   try {
     const test = 0;
 
     if (test) {
-      res.status(200).json({
-        games: [
-          { name: "Fallout 3", platform: "Super Nintendo Entertainment System (SNES)" },
-          { name: "Mario & Luigi: Superstar Saga", platform: "DS" },
-        ],
-      });
-      return;
+      return new Response(
+        JSON.stringify({
+          games: [
+            { name: "Fallout 3", platform: "Super Nintendo Entertainment System (SNES)" },
+            { name: "Mario & Luigi: Superstar Saga", platform: "DS" },
+          ],
+        }),
+      );
     }
 
     // get recommended games from openai
@@ -49,33 +53,47 @@ export default async function (req, res) {
       max_tokens: 3000,
     });
 
-    const recommendedGames = JSON.parse(completion.data.choices[0].text);
-    res.status(200).json(recommendedGames);
-  } catch (error) {
+    const recommendedGames = JSON.parse(completion.data.choices[0].text || "");
+    return new Response(JSON.stringify(recommendedGames));
+  } catch (error: any) {
+    // catch error and return error message
     if (error.response) {
       console.error(error.response.status, error.response.data);
-      res.status(error.response.status).json(error.response.data);
+
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: error.response.data,
+          },
+        }),
+        { status: error.response.status },
+      );
     } else {
       console.error(`Error with OpenAI API request: ${error.message}`);
-      res.status(500).json({
-        error: {
-          message: "An error occurred during your request.",
-        },
-      });
+
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "An error occurred during your request.",
+          },
+        }),
+        { status: 500 },
+      );
     }
   }
 }
 
-function getGamesPrompt(game, age) {
+function getGamesPrompt(game: string, age: string) {
   // optionally get list of 3 other game recommendations
   const withOther = 0;
 
-  const prompt = `Suggest 2 video games that are most similar to ${game} that have a release date ${age === 'retro' ? 'before 2005':'after 2004'}. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on]"}]}.
+  const prompt = `Suggest 2 video games that are most similar to ${game} that have a release date ${
+    age === "retro" ? "before 2005" : "after 2004"
+  }. Give results in a javascript object like this: {"games":[{"name": "[name of game]", "platform":"[platform game is available on]"}]}.
   
   example response:{"games":[{"name": "<name>","platform":"<platform>"}]}
 `;
 
-  console.log(`prompt: ${prompt}`);
   return prompt;
 }
 

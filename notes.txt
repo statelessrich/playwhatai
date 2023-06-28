@@ -1,0 +1,13 @@
+https://vercel.com/statelessrich/playwhatai
+https://statelessrich.github.io/playwhatai/
+https://github.com/davidhu2000/react-spinners
+https://www.davidhu.io/react-spinners/storybook/?path=/docs/pacmanloader--main
+https://react-select.com/home
+
+
+
+FUNCTION_INVOCATION_TIMEOUT in vercel for /generate.
+only allows 5 sec api call with free plan?
+
+
+

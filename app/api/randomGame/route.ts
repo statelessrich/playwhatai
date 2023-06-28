@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// rawg api key
+// RAWG api key
 const API_KEY = process.env.RAWG_API_KEY;
 
-export default async function randomGame() {
+export async function GET() {
   try {
-    // get list of games from rawg
+    // get list of games from RAWG api
     const random = await axios.get("https://api.rawg.io/api/games", {
       params: {
         key: API_KEY,
@@ -13,7 +13,7 @@ export default async function randomGame() {
       },
     });
 
-    // ignore api error
+    // ignore api error; instead we'll hardcode a game
     if (random.status !== 200) {
       return null;
     }
@@ -21,9 +21,9 @@ export default async function randomGame() {
     // pick a random game and return image and name
     const randomNumber = Math.floor(Math.random() * random.data.results.length);
     const randomItem = random.data.results[randomNumber];
-    return { image: randomItem.background_image, name: randomItem.name };
+    return new Response(JSON.stringify({ image: randomItem.background_image, name: randomItem.name }));
   } catch {
-    // ignore api error
-    return null;
+    // ignore api error; instead we'll hardcode a game
+    return new Response(null, { status: 500 });
   }
 }

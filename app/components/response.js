@@ -11,12 +11,12 @@ export default function Response({ result }) {
   return (
     <div className="mt-10 md:max-w-5xl md:mx-auto" ref={resultRef}>
       {/* list of games */}
-      {result?.games?.map((game) => (
+      {result?.map((game) => (
         <div className="p-5 mb-10 bg-white" key={game.name}>
           <div>
             {/* name */}
             <h2 className="font-bold text-3xl break-words">{game.name}</h2>
-or
+
             {/* platform */}
             <p className="text-sm leading-3 font-bold pt-3">{game.platform}</p>
 
@@ -27,7 +27,7 @@ or
       ))}
 
       {/* other games */}
-      {result?.other && (
+      {/* {result?.other && (
         <div className="p-10 bg-white">
           <h2 className="font-bold text-3xl">Others</h2>
 
@@ -37,7 +37,7 @@ or
             </p>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

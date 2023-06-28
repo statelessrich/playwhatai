@@ -1,9 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import Select from "react-select";
 import Image from "next/image";
-import styles from "../styles/form.module.scss";
+import styles from "./form.module.scss";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import useAppStore from "../lib/store";
+import useAppStore from "@/utils/store";
 
 /**
  * Form component for user to input game name and age
@@ -150,7 +151,7 @@ export default function Form({ onSubmit }) {
 
         {/* error message */}
         {showError && (
-          <div className="text-22 font-bold bg-white bg-opacity-90 mx-auto max-w-sm w-full text-center text-red-500 mt-6">
+          <div className="text-22 font-bold bg-white bg-opacity-90 mx-auto max-w-md w-full text-center text-red-500 mt-6 p-4">
             Something went wrong :(
             <br />
             Please try again
