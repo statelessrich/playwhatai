@@ -4,7 +4,7 @@ import Select from "react-select";
 import Image from "next/image";
 import styles from "./form.module.scss";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import useAppStore from "@/utils/store";
+import useAppStore from "utils/store";
 
 /**
  * Form component for user to input game name and age

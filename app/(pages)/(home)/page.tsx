@@ -1,8 +1,8 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import useAppStore from "@/utils/store";
-import Form from "@/components/form/form";
-import Response from "@/components/response";
+import useAppStore from "utils/store";
+import Form from "components/form/form";
+import Response from "components/response";
 import Image from "next/image";
 
 export default function Home() {
