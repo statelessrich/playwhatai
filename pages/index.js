@@ -17,7 +17,7 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ data }) {
-  const test = 0;
+  const test = 1;
   const testResult = {
     games: [
       {

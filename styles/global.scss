@@ -16,12 +16,30 @@
 @layer base {
   :root {
     --text-color: #666;
+    --header-footer-height: 50px;
   }
 }
 
 html {
   font-family: "Montserrat", sans-serif;
   color: var(--text-color);
+}
+
+header,
+footer {
+  height: var(--header-footer-height);
+}
+
+html,
+body {
+  // make app full
+  min-height: 100vh;
+}
+
+main {
+  // sets the minimum height of the main content area to the height of the viewport minus twice the height of the header and footer
+  min-height: calc(100vh - var(--header-footer-height) * 2);
+  overflow-y: auto;
 }
 
 h1,

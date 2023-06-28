@@ -16,7 +16,7 @@ export default function Response({ result }) {
           <div>
             {/* name */}
             <h2 className="font-bold text-3xl break-words">{game.name}</h2>
-
+or
             {/* platform */}
             <p className="text-sm leading-3 font-bold pt-3">{game.platform}</p>
 

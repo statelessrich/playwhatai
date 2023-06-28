@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Footer from "./footer";
+import Header from "./header";
 
 export default function Layout({ children }) {
   return (
@@ -13,7 +14,8 @@ export default function Layout({ children }) {
         <meta property="og:url" content="https://playwhatai.vercel.app/" />
         <link rel="icon" href="/logo.png" />
       </Head>
-      <main className="main flex flex-col items-center pb-20 bg-[#F5F5F5]">{children}</main>
+      <Header></Header>
+      <main className="main flex flex-col items-center pb-20 bg-[#F5F5F5] ">{children}</main>
       <Footer />
     </>
   );
