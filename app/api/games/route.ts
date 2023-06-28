@@ -58,8 +58,6 @@ export async function POST(request: Request) {
   } catch (error: any) {
     // catch error and return error message
     if (error.response) {
-      console.error(error.response.status, error.response.data);
-
       return new Response(
         JSON.stringify({
           error: {
@@ -69,8 +67,6 @@ export async function POST(request: Request) {
         { status: error.response.status },
       );
     } else {
-      console.error(`Error with OpenAI API request: ${error.message}`);
-
       return new Response(
         JSON.stringify({
           error: {

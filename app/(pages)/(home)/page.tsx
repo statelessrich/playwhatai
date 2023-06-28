@@ -10,7 +10,7 @@ export default function Home() {
     name: string;
     platform: string;
     description: string;
-    image: string;
+    image?: string;
   }
 
   interface Recommendations {
@@ -36,7 +36,7 @@ export default function Home() {
     ],
     other: ["Chrono Trigger", "Earthbound", "Dragon Quest"],
   };
-  const [result, setResult] = useState<Recommendations>();
+  const [result, setResult] = useState<Recommendations | null>(null);
   const {
     pageReady,
     setIsLoading,
@@ -117,7 +117,6 @@ export default function Home() {
         setResult(games);
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
         setIsLoading(false);
         setShowError(true);
       }
@@ -149,7 +148,6 @@ export default function Home() {
         return description;
       } catch (error) {
         // try again
-        console.error(error);
         retries--;
       }
     }
