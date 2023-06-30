@@ -24,6 +24,6 @@
     },
     "baseUrl": "./app"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/response.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/components/response.tsx", "app/components/form/form.js"],
   "exclude": ["node_modules"]
 }
