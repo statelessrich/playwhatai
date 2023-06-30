@@ -6,10 +6,18 @@ import styles from "./form.module.scss";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import useAppStore from "../../utils/store";
 
+interface FormProps {
+  onSubmit: (
+    event: React.FormEvent<HTMLFormElement>,
+    gameInput: string,
+    ageInput: { value: string; label: string },
+  ) => void;
+}
+
 /**
  * Form component for user to input game name and age
  */
-export default function Form({ onSubmit }) {
+export default function Form({ onSubmit }: FormProps) {
   const ageOptions = [
     { value: "retro", label: "retro" },
     { value: "modern", label: "modern" },
@@ -48,7 +56,7 @@ export default function Form({ onSubmit }) {
 
       {/* form */}
       <form
-        onSubmit={(e) => onSubmit(e, gameInput, ageInput)}
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => onSubmit(e, gameInput, ageInput)}
         className="relative flex flex-col mx-auto text-3xl py-32 px-0 max-w-[80%]"
       >
         <span className={`${styles.inlineForm} md:max-w-xl md:w-full md:mx-auto p-5`}>

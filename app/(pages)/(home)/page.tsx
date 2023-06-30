@@ -4,39 +4,25 @@ import useAppStore from "../../utils/store";
 import Form from "../../components/form/form";
 import Response from "../../components/response";
 import Image from "next/image";
+import { Game } from "../../types";
 
 export default function Home() {
-  interface Game {
-    name: string;
-    platform: string;
-    description: string;
-    image?: string;
-  }
-
-  interface Recommendations {
-    games: Game[];
-    other: string[];
-  }
-
   const test = 0;
-  const testResult: Recommendations = {
-    games: [
-      {
-        name: "Fallout 3",
-        platform: "Super Nintendo Entertainment System (SNES)",
-        description:
-          "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario's adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG.",
-      },
-      {
-        name: "Mario & Luigi: Superstar Saga",
-        platform: "DS",
-        description:
-          "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG.",
-      },
-    ],
-    other: ["Chrono Trigger", "Earthbound", "Dragon Quest"],
-  };
-  const [result, setResult] = useState<Recommendations | null>(null);
+  const testResult: Game[] = [
+    {
+      name: "Fallout 3",
+      platform: "Super Nintendo Entertainment System (SNES)",
+      description:
+        "Paper Mario is a role-playing game similar to Mario RPG in that it follows the same general premise of Mario's adventures, but with a paper-based art style. Players have to explore levels and combat foes in order to progress. The game also has a variety of puzzles and mini-games to complete, just like in Mario RPG.",
+    },
+    {
+      name: "Mario & Luigi: Superstar Saga",
+      platform: "DS",
+      description:
+        "Mario & Luigi: Superstar Saga is another role-playing game in the Mario franchise that follows a similar format to Mario RPG. Players control Mario and Luigi as they explore various worlds and battle enemies. The game also features puzzles, mini-games and a turn-based combat system similar to Mario RPG.",
+    },
+  ];
+  const [result, setResult] = useState<Game[] | null>(null);
   const {
     pageReady,
     setIsLoading,
@@ -169,7 +155,7 @@ export default function Home() {
       {pageReady && <Form onSubmit={onSubmit} />}
 
       {/* response */}
-      {result && <Response result={result} />}
+      {result && <Response games={result} />}
     </main>
   );
 }

@@ -1,17 +1,18 @@
 import React, { useEffect, useRef } from "react";
+import { Game } from "../types";
 
-export default function Response({ result }) {
-  const resultRef = useRef();
-
+export default function Response({ games }: { games: Game[] }) {
   // scroll into view on load
+  const resultRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    resultRef.current.scrollIntoView({ behavior: "smooth" });
+    resultRef?.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (
     <div className="mt-10 md:max-w-5xl md:mx-auto" ref={resultRef}>
       {/* list of games */}
-      {result?.map((game) => (
+      {games?.map((game: Game) => (
         <div className="p-5 mb-10 bg-white" key={game.name}>
           <div>
             {/* name */}
