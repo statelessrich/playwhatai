@@ -64,7 +64,7 @@ export default function Form({ onSubmit }) {
             </label>{" "}
             {/* game age input (retro/modern) */}
             <Select
-              id="game-age"
+              inputId="game-age"
               isSearchable={false}
               options={ageOptions}
               defaultValue={ageOptions[0]}
