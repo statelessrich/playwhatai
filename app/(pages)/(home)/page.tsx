@@ -1,11 +1,15 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import useAppStore from "../../utils/store";
+import { useSelector, useDispatch, Provider } from "react-redux";
+import { setPageReady } from "../../../redux/features/homeSlice";
+import { setIsLoading, setHeroImage, setGameInput, setShowError } from "../../../redux/features/formSlice";
+import { store, RootState } from "../../../redux/store";
 import Form from "../../components/form/form";
 import Response from "../../components/response";
 import Image from "next/image";
 import { Game } from "../../types";
 
+// home page component to display form and response
 export default function Home() {
   const test = 0;
   const testResult: Game[] = [
@@ -23,16 +27,12 @@ export default function Home() {
     },
   ];
   const [result, setResult] = useState<Game[] | null>(null);
-  const {
-    pageReady,
-    setIsLoading,
-    setHeroImage,
-    setPageReady,
-    setShowError,
-    setGameInput,
-    gameInput,
-    ageInput,
-  } = useAppStore();
+
+  const dispatch = useDispatch();
+
+  // state values
+  const { pageReady } = useSelector((state: RootState) => state.home);
+  const { gameInput } = useSelector((state: RootState) => state.form);
 
   // on load get random game to display image and name in form
   useEffect(() => {
@@ -40,18 +40,18 @@ export default function Home() {
       try {
         const response = await fetch("/api/randomGame");
         const data: Game = await response.json();
-        setHeroImage(data.image);
-        setGameInput(data.name);
-        setPageReady(true);
+        dispatch(setHeroImage(data.image));
+        dispatch(setGameInput(data.name));
+        dispatch(setPageReady(true));
 
         if (test) {
           setResult(testResult);
         }
       } catch (error: any) {
         // if error hardcode game and image
-        setHeroImage("/supermariorpg.png");
-        setGameInput("Super Mario RPG");
-        setPageReady(true);
+        dispatch(setHeroImage("/supermariorpg.png"));
+        dispatch(setGameInput("Super Mario RPG"));
+        dispatch(setPageReady(true));
       }
     };
 
@@ -70,9 +70,9 @@ export default function Home() {
         return;
       }
 
-      setIsLoading(true);
+      dispatch(setIsLoading(true));
       setResult(null);
-      setShowError(false);
+      dispatch(setShowError(false));
 
       try {
         // get recommended games from openai
@@ -101,14 +101,14 @@ export default function Home() {
         );
 
         setResult(games);
-        setIsLoading(false);
+        dispatch(setIsLoading(false));
       } catch (error) {
-        setIsLoading(false);
-        setShowError(true);
+        dispatch(setIsLoading(false));
+        dispatch(setShowError(true));
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [gameInput, ageInput],
+    [gameInput],
   );
 
   // get game description from openai. because vercel's hobby tier has a 10s api call timeout, sometimes the call fails. so, we retry a few times before giving up and displaying an error message.
@@ -142,20 +142,22 @@ export default function Home() {
   }
 
   return (
-    <main className="main w-full flex flex-col items-center pb-20 bg-[#F5F5F5]">
-      <div className={`flex flex-col justify-center items-center ${pageReady ? "mt-20" : "h-screen"}`}>
-        {/* logo */}
-        <Image priority src="/logo.png" alt="play what logo" width={130} height={130} />
+    <Provider store={store}>
+      <main className="main w-full flex flex-col items-center pb-20 bg-[#F5F5F5]">
+        <div className={`flex flex-col justify-center items-center ${pageReady ? "mt-20" : "h-screen"}`}>
+          {/* logo */}
+          <Image priority src="/logo.png" alt="play what logo" width={130} height={130} />
 
-        {/* title */}
-        <h1 className="text-5xl -mt-5">playwhat</h1>
-      </div>
+          {/* title */}
+          <h1 className="text-5xl -mt-5">playwhat</h1>
+        </div>
 
-      {/* form */}
-      {pageReady && <Form onSubmit={onSubmit} />}
+        {/* form */}
+        {pageReady && <Form onSubmit={onSubmit} />}
 
-      {/* response */}
-      {result && <Response games={result} />}
-    </main>
+        {/* response */}
+        {result && <Response games={result} />}
+      </main>
+    </Provider>
   );
 }

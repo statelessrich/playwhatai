@@ -1,5 +1,6 @@
 import React from "react";
 
+// about page component
 function About() {
   return (
     <main className="main w-full flex flex-col items-center pb-20 bg-[#F5F5F5]">

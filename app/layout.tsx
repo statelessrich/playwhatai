@@ -1,6 +1,7 @@
 import "./globals.scss";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import { Providers } from "../redux/provider";
 
 export const metadata = {
   title: "playwhat",
@@ -15,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="">
         <Header />
-        {children}
+        <Providers>{children}</Providers>
         <Footer />
       </body>
     </html>

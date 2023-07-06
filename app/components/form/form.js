@@ -4,18 +4,21 @@ import Select from "react-select";
 import Image from "next/image";
 import styles from "./form.module.scss";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import useAppStore from "../../utils/store";
+import { useSelector } from "react-redux";
 
 /**
  * Form component for user to input game name and age
  */
 export default function Form({ onSubmit }) {
+  // age input
   const ageOptions = [
     { value: "retro", label: "retro" },
     { value: "modern", label: "modern" },
   ];
   const [ageInput, setAgeInput] = useState(ageOptions[0]);
-  const { isLoading, heroImage, showError, gameInput, setGameInput } = useAppStore();
+
+  // form state values
+  const { isLoading, heroImage, showError, gameInput, setGameInput } = useSelector((state) => state.form);
 
   // override styles for react-spinner component
   const loaderStyleOverride = {
