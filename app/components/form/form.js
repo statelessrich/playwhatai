@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import Select from "react-select";
 import Image from "next/image";
-import styles from "./form.module.scss";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { setGameInput } from "../../redux/features/formSlice";
-import { useDispatch, useSelector } from "react-redux";
+import styles from "./form.module.scss";
 
 /**
  * Form component for user to input game name and age
@@ -59,9 +59,12 @@ export default function Form({ onSubmit }) {
       >
         <span className={`${styles.inlineForm} md:max-w-xl md:w-full md:mx-auto p-5`}>
           <div>
-            <span className="block md:inline-block h-10">I wanna play a</span>{" "}
+            <label htmlFor="game-age" className="block md:inline-block h-10">
+              I wanna play a
+            </label>{" "}
             {/* game age input (retro/modern) */}
             <Select
+              id="game-age"
               isSearchable={false}
               options={ageOptions}
               defaultValue={ageOptions[0]}
@@ -112,8 +115,11 @@ export default function Form({ onSubmit }) {
 
           {/* game name input */}
           <div>
-            <span className="mt-8 inline-block h-10">game like</span>{" "}
+            <label htmlFor="game-input" className="mt-8 inline-block h-10">
+              game like
+            </label>{" "}
             <input
+              id="game-input"
               className="inline-block w-full md:max-w-xs focus:outline-blue-400 border-b-4 border-gray-600 bg-transparent text-inherit font-bold px-3 h-20"
               type="text"
               name="game"
