@@ -1,18 +1,6 @@
+import { FormState } from "../../types";
 import { createSlice } from "@reduxjs/toolkit";
 
-interface FormState {
-  // form submit loading state
-  isLoading: boolean;
-
-  // url for image of random game to use as bg
-  heroImage: string | null;
-
-  // flag for showing error message
-  showError: boolean;
-
-  // game name user input
-  gameInput: string;
-}
 
 const formSlice = createSlice({
   name: "form",

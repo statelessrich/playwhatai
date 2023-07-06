@@ -1,9 +1,5 @@
+import { HomeState } from "../../types";
 import { createSlice } from "@reduxjs/toolkit";
-
-interface HomeState {
-  // data is loaded and page is ready to display
-  pageReady: boolean;
-}
 
 const homeSlice = createSlice({
   name: "home",

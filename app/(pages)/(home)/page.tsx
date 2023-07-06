@@ -1,9 +1,9 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from "react-redux";
-import { setPageReady } from "../../../redux/features/homeSlice";
-import { setIsLoading, setHeroImage, setGameInput, setShowError } from "../../../redux/features/formSlice";
-import { store, RootState } from "../../../redux/store";
+import { setPageReady } from "../../redux/features/homeSlice";
+import { setIsLoading, setHeroImage, setGameInput, setShowError } from "../../redux/features/formSlice";
+import { store, RootState } from "../../redux/store";
 import Form from "../../components/form/form";
 import Response from "../../components/response";
 import Image from "next/image";
