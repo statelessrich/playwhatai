@@ -1,27 +1,69 @@
 "use client";
+import { setGameInput } from "@/redux/features/formSlice";
+import { FormState } from "@/types";
 import Image from "next/image";
-import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import { setGameInput } from "../../redux/features/formSlice";
 import styles from "./form.module.scss";
+
+enum AgeEnum {
+  RETRO = "retro",
+  MODERN = "modern",
+}
+
+interface FormProps {
+  submitForm: (
+    // event: React.FormEvent<HTMLFormElement>,
+    // gameInput: string,
+    // ageInput: AgeEnum
+
+    data: any,
+  ) => void;
+}
 
 /**
  * Form component for user to input game name and age
  */
-export default function Form({ onSubmit }) {
+export default function Form({ submitForm }: FormProps) {
   const dispatch = useDispatch();
 
   // age input
   const ageOptions = [
-    { value: "retro", label: "retro" },
-    { value: "modern", label: "modern" },
+    { value: AgeEnum.RETRO, label: AgeEnum.RETRO },
+    { value: AgeEnum.MODERN, label: AgeEnum.MODERN },
   ];
-  const [ageInput, setAgeInput] = useState(ageOptions[0]);
+
+  interface FormInput {
+    gameInput: String;
+    ageInput: AgeEnum;
+  }
+
+  // const [ageInput, setAgeInput] = useState(ageOptions[0]);
 
   // form state values
-  const { isLoading, heroImage, showError, gameInput } = useSelector((state) => state.form);
+  const { isLoading, heroImage, showError, gameInput } = useSelector(
+    (state: { form: FormState }) => state.form,
+  );
+
+  // default form values
+  const defaultValues: FormInput = {
+    gameInput: gameInput,
+    ageInput: AgeEnum.MODERN,
+  };
+
+  const onSubmit: SubmitHandler<FormInput> = (data) => {
+    console.log(data);
+    submitForm(data);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormInput>({ defaultValues });
 
   // override styles for react-spinner component
   const loaderStyleOverride = {
@@ -39,6 +81,19 @@ export default function Form({ onSubmit }) {
     return true;
   }
 
+  const handleGameAgeChange = (newValue: ValueType<AgeOption>, actionMeta: any) => {
+    if (newValue) {
+      const ageEnumValue = (newValue as AgeOption).value;
+      setValue("ageInput", ageEnumValue);
+    }
+  };
+
+  // update game input in form and redux store
+  const handleGameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("gameInput", event.target.value);
+    dispatch(setGameInput(event.target.value));
+  };
+
   return (
     // form container
     <div className={`md:w-full mt-20 overflow-hidden relative bg-gray-50 mx-auto ${styles.formContainer}`}>
@@ -54,7 +109,7 @@ export default function Form({ onSubmit }) {
 
       {/* form */}
       <form
-        onSubmit={(e) => onSubmit(e, gameInput, ageInput)}
+        onSubmit={handleSubmit(onSubmit)}
         className="relative flex flex-col mx-auto text-3xl py-32 px-0 max-w-[80%]"
       >
         <span className={`${styles.inlineForm} md:max-w-xl md:w-full md:mx-auto p-5`}>
@@ -68,7 +123,7 @@ export default function Form({ onSubmit }) {
               isSearchable={false}
               options={ageOptions}
               defaultValue={ageOptions[0]}
-              onChange={setAgeInput}
+              onChange={handleGameAgeChange}
               styles={{
                 container: (baseStyles) => ({
                   ...baseStyles,
@@ -119,12 +174,14 @@ export default function Form({ onSubmit }) {
               game like
             </label>{" "}
             <input
+              {...register("gameInput", { required: true })}
+              // onChange={(e) => dispatch(setGameInput(e.target.value))}
+              onChange={handleGameInputChange}
               id="game-input"
               className="inline-block w-full md:max-w-xs focus:outline-blue-400 border-b-4 border-gray-600 bg-transparent text-inherit font-bold px-3 h-20"
               type="text"
               name="game"
-              value={gameInput}
-              onChange={(e) => dispatch(setGameInput(e.target.value))}
+              // value={gameInput}
             />
           </div>
         </span>

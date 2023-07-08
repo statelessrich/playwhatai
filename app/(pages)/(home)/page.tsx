@@ -1,12 +1,12 @@
 "use client";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch, Provider } from "react-redux";
-import { setPageReady } from "../../redux/features/homeSlice";
-import { setIsLoading, setHeroImage, setGameInput, setShowError } from "../../redux/features/formSlice";
-import { store, RootState } from "../../redux/store";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import Form from "../../components/form/form";
 import Response from "../../components/response";
-import Image from "next/image";
+import { setGameInput, setHeroImage, setIsLoading, setShowError } from "../../redux/features/formSlice";
+import { setPageReady } from "../../redux/features/homeSlice";
+import { RootState, store } from "../../redux/store";
 import { Game } from "../../types";
 
 // home page component to display form and response
@@ -62,8 +62,14 @@ export default function Home() {
   // submit form data, use to generate prompt and submit to openai.
   // memoized to prevent recreation on re-render unless input changes.
   const onSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>, gameInput: string, ageInput: HTMLInputElement) => {
-      event.preventDefault();
+    async (
+      // event: React.FormEvent<HTMLFormElement>,
+      // gameInput: string,
+      // ageInput: HTMLInputElement
+      data: any,
+    ) => {
+      // event.preventDefault();
+      const { gameInput, ageInput } = data;
 
       // validate input
       if (gameInput.trim().length === 0) {
@@ -153,7 +159,7 @@ export default function Home() {
         </div>
 
         {/* form */}
-        {pageReady && <Form onSubmit={onSubmit} />}
+        {pageReady && <Form submitForm={onSubmit} />}
 
         {/* response */}
         {result && <Response games={result} />}
