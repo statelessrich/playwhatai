@@ -1,4 +1,7 @@
 export interface Game {
+  // api error
+  error?: string;
+  
   // game name
   name: string;
 

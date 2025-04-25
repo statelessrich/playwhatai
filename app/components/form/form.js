@@ -32,7 +32,7 @@ export default function Form({ onSubmit }) {
 
   // check if game input exists
   function isInputValid() {
-    if (gameInput.trim().length === 0) {
+    if (gameInput?.trim().length === 0) {
       return false;
     }
 

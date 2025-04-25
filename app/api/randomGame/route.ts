@@ -4,26 +4,41 @@ import axios from "axios";
 const API_KEY = process.env.RAWG_API_KEY;
 
 export async function GET() {
-  try {
-    // get list of games from RAWG api
-    const random = await axios.get("https://api.rawg.io/api/games", {
-      params: {
-        key: API_KEY,
-        page_size: 30,
-      },
-    });
+	try {
+		// get list of games from RAWG api
+		const random = await axios.get("https://api.rawg.io/api/games", {
+			params: {
+				key: API_KEY,
+				page_size: 30,
+			},
+		});
 
-    // ignore api error; instead we'll hardcode a game
-    if (random.status !== 200) {
-      return null;
-    }
+		// ignore api error; instead we'll hardcode a game
+		if (random.status !== 200) {
+			return new Response(
+				JSON.stringify({ error: "Error getting a random game" }),
+				{
+					status: random.status,
+				},
+			);
+		}
 
-    // pick a random game and return image and name
-    const randomNumber = Math.floor(Math.random() * random.data.results.length);
-    const randomItem = random.data.results[randomNumber];
-    return new Response(JSON.stringify({ image: randomItem.background_image, name: randomItem.name }));
-  } catch {
-    // ignore api error; instead we'll hardcode a game
-    return new Response(null, { status: 500 });
-  }
+		// pick a random game and return image and name
+		const randomNumber = Math.floor(Math.random() * random.data.results.length);
+		const randomItem = random.data.results[randomNumber];
+		return new Response(
+			JSON.stringify({
+				image: randomItem.background_image,
+				name: randomItem.name,
+			}),
+		);
+	} catch {
+		// ignore api error; instead we'll hardcode a game
+		return new Response(
+			JSON.stringify({ error: "Error getting a random game" }),
+			{
+				status: 500,
+			},
+		);
+	}
 }

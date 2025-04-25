@@ -3,11 +3,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from "react-redux";
 import { setPageReady } from "../../redux/features/homeSlice";
 import { setIsLoading, setHeroImage, setGameInput, setShowError } from "../../redux/features/formSlice";
-import { store, RootState } from "../../redux/store";
+import { store, type RootState } from "../../redux/store";
 import Form from "../../components/form/form";
 import Response from "../../components/response";
 import Image from "next/image";
-import { Game } from "../../types";
+import type { Game } from "../../types";
 
 // home page component to display form and response
 export default function Home() {
@@ -40,6 +40,11 @@ export default function Home() {
       try {
         const response = await fetch("/api/randomGame");
         const data: Game = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
         dispatch(setHeroImage(data.image));
         dispatch(setGameInput(data.name));
         dispatch(setPageReady(true));
