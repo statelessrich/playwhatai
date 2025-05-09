@@ -1,11 +1,10 @@
+import type { APIResponse } from "@/types";
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(request: Request) {
 	const { game, recommendedGame } = await request.json();
-
-	console.log(game, recommendedGame);
 
 	// validate input
 	if (!game || game.trim().length === 0) {
@@ -57,16 +56,22 @@ export async function POST(request: Request) {
 
 		const description = completion.output_text;
 		return new Response(JSON.stringify(description));
-	} catch (error: any) {
-		if (error.response) {
-			return new Response(JSON.stringify({ error: error.response.data }), {
-				status: error.response.status,
+	} catch (error: unknown) {
+		const response = (error as APIResponse).response;
+
+		if (response) {
+			return new Response(JSON.stringify({ error: response.data }), {
+				status: response.status,
 			});
 		}
 
-		return new Response(JSON.stringify({ error: error.message }), {
-			status: 500,
-		});
+		return new Response(
+			JSON.stringify({
+				error:
+					error instanceof Error ? error.message : "An unknown error occurred",
+			}),
+			{ status: 500 },
+		);
 	}
 }
 

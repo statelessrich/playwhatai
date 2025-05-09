@@ -1,11 +1,10 @@
+import type { APIResponse } from "@/types";
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(request: Request) {
 	const { game, age } = await request.json();
-
-  console.log(game, age);
 
 	// validate input
 	if (game.trim().length === 0) {
@@ -41,22 +40,26 @@ export async function POST(request: Request) {
 			model: "gpt-3.5-turbo",
 			instructions:
 				"You are a helpful assistant that recommends games based on user input.",
-			input:  getGamesPrompt(game, age),
+			input: getGamesPrompt(game, age),
 		});
 
 		const recommendedGames = JSON.parse(response.output_text || "");
 		return new Response(JSON.stringify(recommendedGames));
-	} catch (error: any) {
+	} catch (error: unknown) {
 		// catch error and return error message
-		if (error.response) {
-			return new Response(
-				JSON.stringify({
-					error: {
-						message: error.response.data,
-					},
-				}),
-				{ status: error.response.status },
-			);
+		if (typeof error === "object") {
+			const response = (error as APIResponse).response;
+
+			if (response) {
+				return new Response(
+					JSON.stringify({
+						error: {
+							message: response.data,
+						},
+					}),
+					{ status: response.status },
+				);
+			}
 		}
 
 		return new Response(
