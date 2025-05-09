@@ -8,7 +8,9 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"biome": "npx biome check --write"
+		"biome": "npx biome check --write",
+		"prepare": "husky",
+		"lint:staged": "biome check --error-on-warnings --no-errors-on-unmatched --staged ./**/*.{js,ts}"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^2.7.0",
@@ -35,6 +37,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
+		"husky": "^9.1.7",
 		"sass": "^1.87.0"
 	}
 }
